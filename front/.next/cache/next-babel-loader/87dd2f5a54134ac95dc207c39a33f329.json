@@ -1,0 +1,1 @@
+{"ast":null,"code":"const UserProfile = () => {};","map":{"version":3,"names":["UserProfile"],"sources":["C:/Users/정다빈/Desktop/nodebird/front/components/UserProfile.js"],"sourcesContent":["const UserProfile = () => {};\r\n"],"mappings":"AAAA,MAAMA,WAAW,GAAG,MAAM,CAAC,CAAC"},"metadata":{},"sourceType":"script"}
