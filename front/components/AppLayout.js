@@ -48,7 +48,7 @@ const AppLayout = ({ children }) => {
         </Col>
       </Row>
     </div>
-  );
+  ); //grid Row Col
 }; //return 안의 모든 값들이 node 화면에 비추는 모든것 react의 node
 
 AppLayout.propTypes = {
