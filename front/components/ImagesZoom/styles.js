@@ -66,10 +66,12 @@ export const Indicator = styled.div`
 `;
 
 export const Global = createGlobalStyle`
+
 .slick-slide {
     display: inline-block
 }
 .antd-card-cover {
     transform: none !important;
 }
+
 `;

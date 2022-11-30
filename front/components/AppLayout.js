@@ -23,7 +23,7 @@ const Global = createGlobalStyle`
 `; //gutter 떄문에 슬라이드바가 생기는 문제 해결
 
 const AppLayout = ({ children }) => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { me } = useSelector((state) => state.user);
   //구조분해할당 const { isLoggedIn } = useSelector((state) => state.user);
   const items = [
     {
@@ -59,7 +59,7 @@ const AppLayout = ({ children }) => {
       <Menu mode='horizontal' items={items} />
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         {/* xs 모바일 md 데스크탑 n/24 */}
         <Col xs={24} md={12}>

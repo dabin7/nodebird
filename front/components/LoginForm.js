@@ -3,8 +3,8 @@ import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -16,22 +16,27 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput('');
+  const { isLoggingIn } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   //컴포넌트에 props로 넘겨주는 함수는 useCallback해야 최적화가 된다
 
   const onSubmitForm = useCallback(() => {
-    console.log(id, password);
-    dispatch(loginAction({ id, password }));
-  }, [id, password]); //가상의 state 더미 데이터 setIsLoggedIn
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]); //가상의 state 더미 데이터 setIsLoggedIn
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
       <div>
-        <label htmlFor='user-id'>아이디</label>
+        <label htmlFor='user-email'>이메일</label>
         <br />
-        <Input name='user-id' value={id} onChange={onChangeId} required />
+        <Input
+          name='user-email'
+          value={email}
+          onChange={onChangeEmail}
+          required
+        />
       </div>
       <div>
         <label htmlFor='user-password'>비밀번호</label>
@@ -45,7 +50,7 @@ const LoginForm = () => {
         />
       </div>
       <ButtonWrapper>
-        <Button type='primary' htmlType='submit' loading={false}>
+        <Button type='primary' htmlType='submit' loading={isLoggingIn}>
           로그인
         </Button>
         <Link href='/signup'>
