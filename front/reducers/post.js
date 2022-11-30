@@ -95,6 +95,7 @@ const dummyComment = (data) => ({
   },
 });
 
+//immer로 스위치문을 다 바꿔줬음. 불변성을 지키면서 state => draft
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -103,71 +104,67 @@ const reducer = (state = initialState, action) => {
         draft.addPostDone = false;
         draft.addPostError = null;
         break;
-        return {
-          ...state,
-          addPostLoading: true,
-          addPostDone: false,
-          addPostError: null,
-        };
+
       case ADD_POST_SUCCESS:
-        return {
-          ...state,
-          mainPosts: [dummyPost(action.data), ...state.mainPosts], //dummyPost를 앞에다 두어야 게시물이 위에 온다.
-          addPostLoading: false,
-          addPostDone: true,
-        };
+        draft.addPostLoading = false;
+        draft.addPostDone = true;
+        draft.mainPosts.unshift(dummyPost(action.data));
+        break;
+
       case ADD_POST_FAILURE:
-        return {
-          addPostLoading: false,
-          addPostError: action.error,
-        };
+        draft.addPostLoading = false;
+        draft.addPostError = action.error;
+        break;
 
       case REMOVE_POST_REQUEST:
-        return {
-          ...state,
-          removePostLoading: true,
-          removePostDone: false,
-          removePostError: null,
-        };
+        draft.removePostLoading = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+
       case REMOVE_POST_SUCCESS:
-        return {
-          ...state,
-          mainPosts: state.mainPosts.filter((v) => v.id !== action.data),
-          removePostDone: true,
-        };
+        draft.removePostLoading = false;
+        draft.removePostDone = true;
+        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+        break;
+
       case REMOVE_POST_FAILURE:
-        return {
-          removePostLoading: false,
-          removePostError: action.error,
-        };
+        draft.removePostLoading = false;
+        draft.removePostError = action.error;
+        break;
 
       case ADD_COMMENT_REQUEST:
-        return {
-          ...state,
-          addCommentLoading: true,
-          addCommentDone: false,
-          addCommentError: null,
-        };
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+
       case ADD_COMMENT_SUCCESS:
-        const postIndex = state.mainPosts.findIndex(
-          (v) => v.id === action.data.postId
-        );
-        const post = { ...state.mainPosts[postIndex] };
-        post.Comments = [dummyComment(action.data.content), ...post.Comments];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = post;
-        //불변성 지키려면 이렇게 해줌...
-        return {
-          ...state,
-          mainPosts,
-          addCommentLoading: false,
-          addCommentDone: true,
-        };
+        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+        post.Comments.unshift(dummyComment(action.data.content));
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
+      //아래 주석 코드가 위 2줄로 바뀜. unshift *
+      // const postIndex = state.mainPosts.findIndex(
+      //   (v) => v.id === action.data.postId
+      // );
+      // const post = { ...state.mainPosts[postIndex] };
+      // post.Comments = [dummyComment(action.data.content), ...post.Comments];
+      // const mainPosts = [...state.mainPosts];
+      // mainPosts[postIndex] = post;
+      // //불변성 지키려면 이렇게 해줌...
+
+      // return {
+      //   ...state,
+      //   mainPosts,
+      //   addCommentLoading: false,
+      //   addCommentDone: true,
+      // }
       case ADD_COMMENT_FAILURE:
-        return {
-          addCommentLoading: false,
-          addCommentError: action.error,
-        };
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
 
       default:
         return state;
