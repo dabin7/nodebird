@@ -70,6 +70,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]} //배열안에 jsx를 넣어줄때는 key를 항상 넣어줘야됨
+        extra={<FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
