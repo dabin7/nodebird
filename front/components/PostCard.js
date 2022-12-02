@@ -13,6 +13,7 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { REMOVE_POST_REQUEST } from '../reducers/post';
+import FollowButton from './FollowButton';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]} //배열안에 jsx를 넣어줄때는 key를 항상 넣어줘야됨
-        extra={<FollowButton post={post} />}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
